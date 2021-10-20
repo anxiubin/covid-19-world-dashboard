@@ -1,5 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
-import { Chart } from 'chart.js';
+import {
+  Chart,
+  LineElement,
+  LineController,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  Filler,
+} from 'chart.js';
+
 import {
   CovidSummaryResponse,
   CovidStatus,
@@ -182,13 +191,27 @@ async function setupData() {
   setLastUpdatedTimestamp(data);
 }
 
+let casesChart: any;
+
 function renderChart(data: number[], labels: string[]) {
   const ctx = ($('#lineChart') as HTMLCanvasElement).getContext('2d');
 
   Chart.defaults.color = '#f5eaea';
   Chart.defaults.font.family = 'Exo 2';
+  Chart.register(
+    LineElement,
+    LineController,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    Filler
+  );
 
-  new Chart(ctx, {
+  if (casesChart !== undefined) {
+    casesChart.destroy();
+  }
+
+  casesChart = new Chart(ctx, {
     type: 'line',
     data: {
       labels,
@@ -202,7 +225,7 @@ function renderChart(data: number[], labels: string[]) {
         },
       ],
     },
-    options: {},
+    options: { responsive: true, maintainAspectRatio: false },
   });
 }
 
