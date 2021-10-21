@@ -1,18 +1,19 @@
 {
 	"name": "covid-19-world-dashboard",
 	"version": "1.0.0",
-	"description": "",
+	"description": "covid-19-world-dashboard for learning TypeScript",
 	"main": "app.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "webpack"
+		"build": "webpack",
+		"start": "live-server"
 	},
-	"keywords": [],
-	"author": "",
+	"author": "anxiubin",
 	"license": "ISC",
 	"dependencies": {
 		"axios": "^0.23.0",
-		"chart.js": "^3.5.1"
+		"chart.js": "^3.5.1",
+		"live-server": "^1.2.1"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.15.8",
