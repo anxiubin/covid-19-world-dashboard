@@ -232,3 +232,33 @@ header > h1 {
 		opacity: 0;
 	}
 }
+
+@media screen and (max-width:768px) { 
+	.main-container {
+		flex-direction: column;
+		flex-wrap: wrap;
+	}
+	.left-panel, .right-panel {
+		width: 100%;
+	}
+	.right-panel {
+		margin-left: 0;
+	}
+	.last-updated-time {
+		margin-bottom: 1rem;
+	}
+ }
+
+ @media screen and (max-width:420px) { 
+	.summary-wrapper{
+		flex-direction: column;
+		flex-wrap: wrap;
+	}
+	.recovered-container {
+		margin-left: 0;
+		margin-top: 1rem;
+
+	}
+ }
+
+
