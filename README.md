@@ -2,8 +2,10 @@
 <img src="https://user-images.githubusercontent.com/51507260/138276376-fc64d5a7-04b0-45b0-ae1b-304457d51d6d.gif" style="width: 600px;" alt="covid19 dashboard">
 
 ## 💻 Get Started
-`npm run build`
-`npm run start`
+```
+npm run build
+npm run start
+```
 
 ## ✨ Feature
 - [x] 자바스크립트 프로젝트틑 타입스크립트로 변환
