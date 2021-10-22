@@ -53,7 +53,7 @@ function createSpinnerElement(id: string): HTMLDivElement {
 }
 
 // state
-let isDeathLoading = false;
+let isStatusLoading = false;
 
 // api
 function fetchCovidSummary(): Promise<AxiosResponse<CovidSummaryResponse>> {
@@ -81,42 +81,49 @@ function initEvents() {
 }
 
 async function handleListClick(event: Event) {
-  let selectedId;
-  if (
-    event.target instanceof HTMLParagraphElement ||
-    event.target instanceof HTMLSpanElement
-  ) {
-    selectedId = event.target.parentElement?.id;
+  try {
+    let selectedId;
+    if (
+      event.target instanceof HTMLParagraphElement ||
+      event.target instanceof HTMLSpanElement
+    ) {
+      selectedId = event.target.parentElement?.id;
+    }
+    if (event.target instanceof HTMLLIElement) {
+      selectedId = event.target.id;
+    }
+    if (isStatusLoading) {
+      return;
+    }
+    clearDeathList();
+    clearRecoveredList();
+    startLoadingAnimation();
+    isStatusLoading = true;
+    const { data: deathResponse } = await fetchCountryInfo(
+      selectedId,
+      CovidStatus.Deaths
+    );
+    const { data: recoveredResponse } = await fetchCountryInfo(
+      selectedId,
+      CovidStatus.Recovered
+    );
+    const { data: confirmedResponse } = await fetchCountryInfo(
+      selectedId,
+      CovidStatus.Confirmed
+    );
+    endLoadingAnimation();
+    setDeathsList(deathResponse);
+    setTotalDeathsByCountry(deathResponse);
+    setRecoveredList(recoveredResponse);
+    setTotalRecoveredByCountry(recoveredResponse);
+    setChartData(confirmedResponse);
+  } catch (error) {
+    console.log(error);
+    alert(error);
+  } finally {
+    isStatusLoading = false;
+    endLoadingAnimation();
   }
-  if (event.target instanceof HTMLLIElement) {
-    selectedId = event.target.id;
-  }
-  if (isDeathLoading) {
-    return;
-  }
-  clearDeathList();
-  clearRecoveredList();
-  startLoadingAnimation();
-  isDeathLoading = true;
-  const { data: deathResponse } = await fetchCountryInfo(
-    selectedId,
-    CovidStatus.Deaths
-  );
-  const { data: recoveredResponse } = await fetchCountryInfo(
-    selectedId,
-    CovidStatus.Recovered
-  );
-  const { data: confirmedResponse } = await fetchCountryInfo(
-    selectedId,
-    CovidStatus.Confirmed
-  );
-  endLoadingAnimation();
-  setDeathsList(deathResponse);
-  setTotalDeathsByCountry(deathResponse);
-  setRecoveredList(recoveredResponse);
-  setTotalRecoveredByCountry(recoveredResponse);
-  setChartData(confirmedResponse);
-  isDeathLoading = false;
 }
 
 function setDeathsList(data: CountrySummaryResponse) {
@@ -184,12 +191,17 @@ function endLoadingAnimation() {
 }
 
 async function setupData() {
-  const { data } = await fetchCovidSummary();
-  setTotalConfirmedNumber(data);
-  setTotalDeathsByWorld(data);
-  setTotalRecoveredByWorld(data);
-  setCountryRanksByConfirmedCases(data);
-  setLastUpdatedTimestamp(data);
+  try {
+    const { data } = await fetchCovidSummary();
+    setTotalConfirmedNumber(data);
+    setTotalDeathsByWorld(data);
+    setTotalRecoveredByWorld(data);
+    setCountryRanksByConfirmedCases(data);
+    setLastUpdatedTimestamp(data);
+  } catch (error) {
+    console.log(error);
+    alert(error);
+  }
 }
 
 let casesChart: any;
