@@ -111,7 +111,6 @@ async function handleListClick(event: Event) {
       selectedId,
       CovidStatus.Confirmed
     );
-    endLoadingAnimation();
     setDeathsList(deathResponse);
     setTotalDeathsByCountry(deathResponse);
     setRecoveredList(recoveredResponse);
